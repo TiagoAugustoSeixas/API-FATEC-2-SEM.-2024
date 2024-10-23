@@ -28,4 +28,13 @@ public class ConexaoDao {
             throw new RuntimeException(e);
         }
     }
+
+    public static void testConnection() {
+        Connection connection = getConnection();
+        if (connection != null) {
+            System.out.println("Conexão com o banco de dados estabelecida com sucesso!");
+        } else {
+            System.out.println("Falha na conexão com o banco de dados.");
+        }
+    }
 }
