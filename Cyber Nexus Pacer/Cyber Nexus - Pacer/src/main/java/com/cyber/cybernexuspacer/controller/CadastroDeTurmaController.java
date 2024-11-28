@@ -2,6 +2,7 @@ package com.cyber.cybernexuspacer.controller;
 
 import com.cyber.cybernexuspacer.dao.CadastroTurmaDao;
 import com.cyber.cybernexuspacer.dao.ConexaoDao;
+import com.cyber.cybernexuspacer.dao.SprintDao;
 import com.cyber.cybernexuspacer.entity.AreaDoAluno;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -17,6 +18,7 @@ import java.io.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Scanner;
 
 import static com.mysql.cj.conf.PropertyKey.logger;
@@ -148,45 +150,102 @@ public class CadastroDeTurmaController {
 
     @FXML
     public void onClickCarregarPlanilha(javafx.event.ActionEvent actionEvent) {
-        // Abre o explorador de arquivos para a escolha do arquivo
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setInitialDirectory(new File("."));
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
-        File selectFile = fileChooser.showOpenDialog(button_carregarDocumento.getScene().getWindow());
+        try {
+            // Verifica se existem sprints cadastradas
+            SprintDao sprintDao = new SprintDao();
+            List existeSprint = sprintDao.listarSprints();
 
-        if (selectFile != null) {
-            try (Scanner scanner = new Scanner(selectFile)) {
-                listaAluno.clear();  // Limpa a lista antes de adicionar novos dados
+            if (existeSprint.isEmpty()) {
+                // Exibe um alerta caso não existam sprints cadastradas
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Aviso");
+                alert.setHeaderText("Nenhuma Sprint Encontrada");
+                alert.setContentText("Por favor, cadastre as sprints antes de importar o arquivo de alunos.");
+                alert.showAndWait();
+                return; // Interrompe a execução se não houver sprints
+            }
 
-                // Ignora a linha do cabeçalho
-                if (scanner.hasNextLine()) {
-                    scanner.nextLine();
-                }
+            // Abre o explorador de arquivos para a escolha do arquivo
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setInitialDirectory(new File("."));
+            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
+            File selectFile = fileChooser.showOpenDialog(button_carregarDocumento.getScene().getWindow());
 
-                // Variável para gerar IDs fictícios
-                int idTemporario = 1;  // Inicia o contador do ID temporário
+            if (selectFile != null) {
+                try (Scanner scanner = new Scanner(selectFile)) {
+                    listaAluno.clear();  // Limpa a lista antes de adicionar novos dados
 
-                // Lê o arquivo linha por linha e adiciona cada pessoa na lista
-                while (scanner.hasNextLine()) {
-                    String linha = scanner.nextLine();
-                    String[] dados = linha.split(",");
+                    // Ignora a linha do cabeçalho (caso tenha)
+                    if (scanner.hasNextLine()) {
+                        scanner.nextLine();
+                    }
 
+                    // Variável para gerar IDs fictícios
+                    int idTemporario = 1;  // Inicia o contador do ID temporário
 
-                    if (dados.length >= 1) {
+                    boolean arquivoValido = true; // Flag para indicar se o arquivo está no formato correto
+
+                    // Lê o arquivo linha por linha e valida cada linha
+                    while (scanner.hasNextLine()) {
+                        String linha = scanner.nextLine().trim();
+
+                        // Se a linha estiver vazia, pula para a próxima
+                        if (linha.isEmpty()) {
+                            continue;
+                        }
+
+                        String[] dados = linha.split(",");
+
+                        // Verifica se a linha tem exatamente 3 colunas
+                        if (dados.length != 3) {
+                            // Exibe um alerta caso o formato da linha esteja errado
+                            Alert alert = new Alert(Alert.AlertType.ERROR);
+                            alert.setTitle("Erro de Formato");
+                            alert.setHeaderText("Formato Incorreto");
+                            alert.setContentText("A linha não está no formato esperado. \nCada linha deve ter 'nome,email,grupo'. \nLinha ignorada: " + linha);
+                            alert.showAndWait();
+                            arquivoValido = false; // Marca que o arquivo está inválido
+                            break; // Interrompe a leitura do arquivo
+                        }
+
+                        // Se a linha estiver correta, adiciona o aluno à lista
                         String nome = dados[0];
                         String email = dados[1];
                         String grupo = dados[2];
-                        AreaDoAluno pessoa = new AreaDoAluno(idTemporario,nome, email, grupo, "fatec2024", "Aluno");
-                        listaAluno.add(pessoa);
+                        AreaDoAluno aluno = new AreaDoAluno(idTemporario, nome, email, grupo, "fatec2024", "Aluno");
+                        listaAluno.add(aluno);
+
+                        // Incrementa o ID temporário para o próximo aluno
+                        idTemporario++;
                     }
-                    // Incrementa o ID temporário para o próximo aluno
-                    idTemporario++;
+
+                    // Se o arquivo não for válido, exibe um alerta e não salva nenhum aluno
+                    if (!arquivoValido) {
+                        listaAluno.clear();  // Limpa a lista caso o arquivo seja inválido
+                        Alert alert = new Alert(Alert.AlertType.WARNING);
+                        alert.setTitle("Erro no Arquivo");
+                        alert.setHeaderText("Arquivo Inválido");
+                        alert.setContentText("O arquivo contém erro(s) de formatação. Nenhum aluno foi adicionado.");
+                        alert.showAndWait();
+                    } else if (listaAluno.isEmpty()) {
+                        // Caso o arquivo esteja vazio ou não tenha alunos válidos, exibe um alerta
+                        Alert alert = new Alert(Alert.AlertType.WARNING);
+                        alert.setTitle("Aviso");
+                        alert.setHeaderText("Nenhum Aluno Encontrado");
+                        alert.setContentText("O arquivo CSV não contém alunos válidos.");
+                        alert.showAndWait();
+                    }
+
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
                 }
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
+
+
 
     @FXML
     void onClickSair(ActionEvent event) throws IOException {
