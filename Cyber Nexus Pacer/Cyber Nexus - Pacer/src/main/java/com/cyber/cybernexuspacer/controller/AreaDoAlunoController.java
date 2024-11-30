@@ -123,17 +123,19 @@ public class AreaDoAlunoController {
 
         // Cria um botão para cada sprint
         for (Sprint sprint : sprints) {
-            Button sprintButton = new Button("Sprint " + sprint.getNumSprint());
-            sprintButton.setPrefSize(188, 40);
-            sprintButton.setLayoutX(6);
-            sprintButton.setLayoutY(7);
-            sprintButton.setStyle("-fx-background-color: #86B6DD; -fx-font-weight: bolder; -fx-padding: 10 20 10 20;");
-            sprintButton.setOnAction(event -> {
-                // Ação quando a sprint for clicada
-                System.out.println("Sprint " + sprint.getNumSprint() + " selecionada.");
-                // Você pode adicionar a lógica para lidar com o clique na sprint
-            });
-            vBoxSprintsBtns.getChildren().add(sprintButton);  // Adiciona o botão à interface
+            if (sprint.getLiberado() == 1) {
+                Button sprintButton = new Button("Sprint " + sprint.getNumSprint());
+                sprintButton.setPrefSize(188, 40);
+                sprintButton.setLayoutX(6);
+                sprintButton.setLayoutY(7);
+                sprintButton.setStyle("-fx-background-color: #86B6DD; -fx-font-weight: bolder; -fx-padding: 10 20 10 20;");
+                sprintButton.setOnAction(event -> {
+                    // Ação quando a sprint for clicada
+                    System.out.println("Sprint " + sprint.getNumSprint() + " selecionada.");
+                    // Você pode adicionar a lógica para lidar com o clique na sprint
+                });
+                vBoxSprintsBtns.getChildren().add(sprintButton);  // Adiciona o botão à interface
+            }
         }
     }
 

@@ -19,8 +19,8 @@ public class CadastroTurmaDao {
 
         String sqlAluno = "INSERT INTO ALUNOS (NOME,EMAIL, GRUPO) VALUES(?, ?, ?)";
         String sqlNotasGrupos =
-                "INSERT INTO notas_grupos (grupo, num_sprint, nota_grupo,liberado) " +
-                        "SELECT g.grupo, s.num_sprint, 0,0 " +
+                "INSERT INTO notas_grupos (grupo, num_sprint, nota_grupo) " +
+                        "SELECT g.grupo, s.num_sprint, 0 " +
                         "FROM grupos g " +
                         "CROSS JOIN sprints s " +
                         "WHERE NOT EXISTS ( " +
