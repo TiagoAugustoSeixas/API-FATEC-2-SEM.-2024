@@ -96,6 +96,7 @@ public class SprintDao {
                 Date dataFinal = rs.getDate("data_final");
 
                 Sprint sprint = new Sprint(id, numSprint, dataInicial, dataFinal);
+                sprint.setLiberado(rs.getInt("liberado"));
                 sprints.add(sprint);
             }
         } catch (SQLException e) {

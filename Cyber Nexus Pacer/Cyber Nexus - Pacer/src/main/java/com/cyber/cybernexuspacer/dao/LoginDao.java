@@ -142,10 +142,6 @@ public class LoginDao {
                 calDataLimite.set(Calendar.MILLISECOND, 0);
                 Date dataLimiteSemHora = new Date(calDataLimite.getTimeInMillis());
 
-                System.out.println("data limite: " + dataLimiteSemHora);
-                System.out.println("data atual: " + dataAtual);
-                System.out.println(dataAtual.before(dataLimite));
-                System.out.println(dataAtual.equals(dataLimite));
                 return !dataAtual.after(dataLimiteSemHora);  // Se a data atual for antes ou igual à data limite, o acesso é permitido
             }
         } catch (SQLException e) {

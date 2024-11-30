@@ -47,7 +47,12 @@ public class PontuacaoGruposController {
             sprintButton.setLayoutY(yPosition);
             sprintButton.setPrefWidth(120.0);
             sprintButton.setPrefHeight(30.0);
-            sprintButton.setStyle("-fx-background-color: #86B6DD; -fx-text-fill: WHITE; -fx-font-size: 12px;");
+            if (sprint.getLiberado() == 1){
+                sprintButton.setStyle("-fx-background-color: #86B6DD; -fx-text-fill: WHITE; -fx-font-size: 12px;");
+            }else{
+                sprintButton.setStyle("-fx-background-color: #FF0000; -fx-text-fill: WHITE; -fx-font-size: 12px;");
+            }
+
 
             // Evento ao clicar no botão
             sprintButton.setOnAction(event -> {
@@ -143,7 +148,7 @@ public class PontuacaoGruposController {
 
         // Chamar o método do DAO para liberar a sprint
         PontuacaoGruposDao.bloquearSprint(numSprint);
-
+        carregarSprints();
         showAlert(Alert.AlertType.INFORMATION, "Sucesso", "Sprint " + numSprint + " bloqueada com sucesso!");
     }
 
@@ -159,7 +164,7 @@ public class PontuacaoGruposController {
 
         // Chamar o método do DAO para liberar a sprint
         PontuacaoGruposDao.liberarSprint(numSprint);
-
+        carregarSprints();
         showAlert(Alert.AlertType.INFORMATION, "Sucesso", "Sprint " + numSprint + " liberada com sucesso!");
     }
 
