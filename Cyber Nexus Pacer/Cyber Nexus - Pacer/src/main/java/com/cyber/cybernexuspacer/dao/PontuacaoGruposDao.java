@@ -11,12 +11,6 @@ import java.util.List;
 
 public class PontuacaoGruposDao {
 
-    /**
-     * Pesquisa todos os grupos e suas respectivas informações.
-     *
-     * @return Lista de PontuacaoGrupo com informações de cada grupo.
-     * @throws SQLException Em caso de falha na consulta ao banco de dados.
-     */
     public static List<PontuacaoGrupo> pesquisarGrupos() throws SQLException {
         String sql = """
                 SELECT G.ID, G.GRUPO, NG.NOTA_GRUPO, COUNT(A.id) AS INTEGRANTES
@@ -45,14 +39,6 @@ public class PontuacaoGruposDao {
         return pontGrupos;
     }
 
-    /**
-     * Atualiza a nota de um grupo para uma sprint específica.
-     *
-     * @param nomeGrupo Nome do grupo.
-     * @param numSprint Número da sprint.
-     * @param novaNota  Nova nota do grupo.
-     * @throws SQLException Em caso de falha na atualização.
-     */
     public static void salvarNotaGrupo(String nomeGrupo, int numSprint, int novaNota) throws SQLException {
         String sql = "UPDATE NOTAS_GRUPOS SET NOTA_GRUPO = ? WHERE GRUPO = ? AND NUM_SPRINT = ?";
 
@@ -67,14 +53,7 @@ public class PontuacaoGruposDao {
         }
     }
 
-    /**
-     * Obtém as notas de um grupo para uma sprint específica.
-     *
-     * @param grupo     Nome do grupo.
-     * @param numSprint Número da sprint.
-     * @return Lista de notas associadas ao grupo e sprint.
-     * @throws SQLException Em caso de falha na consulta ao banco de dados.
-     */
+
     public static List<Integer> selecionarNotasSprint(String grupo, int numSprint) throws SQLException {
         String sql = "SELECT NOTA_GRUPO FROM NOTAS_GRUPOS WHERE GRUPO = ? AND NUM_SPRINT = ?";
 
@@ -93,4 +72,37 @@ public class PontuacaoGruposDao {
         }
         return notas;
     }
+
+    public static void liberarSprint(int numSprint) throws SQLException {
+        String sql = """
+            UPDATE SPRINTS
+            SET LIBERADO = 1, DATA_LIBERACAO = CURRENT_DATE
+            WHERE NUM_SPRINT = ?;
+            """;
+
+        try (Connection connection = ConexaoDao.getConnection();
+             PreparedStatement stmt = connection.prepareStatement(sql)) {
+
+            stmt.setInt(1, numSprint); // Configura o número da sprint
+
+            stmt.executeUpdate(); // Executa o update no banco
+        }
+    }
+
+    public static void bloquearSprint(int numSprint) throws SQLException {
+        String sql = """
+            UPDATE SPRINTS
+            SET LIBERADO = 0
+            WHERE NUM_SPRINT = ?;
+            """;
+
+        try (Connection connection = ConexaoDao.getConnection();
+             PreparedStatement stmt = connection.prepareStatement(sql)) {
+
+            stmt.setInt(1, numSprint); // Configura o número da sprint
+
+            stmt.executeUpdate(); // Executa o update no banco
+        }
+    }
+
 }

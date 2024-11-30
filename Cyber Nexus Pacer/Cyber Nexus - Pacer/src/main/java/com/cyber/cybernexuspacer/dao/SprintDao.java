@@ -15,7 +15,7 @@ public class SprintDao {
 
     public int salvarSprint(Sprint sprint) {
         String fetchSprintsSql = "SELECT NUM_SPRINT, DATA_FINAL FROM SPRINTS ORDER BY NUM_SPRINT ASC"; // Consulta para buscar sprints existentes
-        String insertSql = "INSERT INTO SPRINTS (NUM_SPRINT, DATA_INICIAL, DATA_FINAL) VALUES (?, ?, ?)";
+        String insertSql = "INSERT INTO SPRINTS (NUM_SPRINT, DATA_INICIAL, DATA_FINAL, DIAS_LIBERADOS, DATA_LIBERACAO, LIBERADO) VALUES (?, ?, ?,NULL,NULL,0)";
 
         try (Connection connection = ConexaoDao.getConnection()) {
             // 1. Buscar todas as sprints existentes
@@ -79,9 +79,6 @@ public class SprintDao {
         alert.setContentText(mensagem);
         alert.showAndWait();
     }
-
-
-
 
     // Lista todos os sprints no banco de dados
     public List<Sprint> listarSprints() throws SQLException {
@@ -147,24 +144,7 @@ public class SprintDao {
         return sprintAtual;
     }
 
-    // Conta o total de sprints no banco de dados
-    public int contarSprints() {
-        String sql = "SELECT COUNT(*) FROM SPRINTS";
-        int totalSprints = 0;
 
-        try (Connection connection = ConexaoDao.getConnection();
-             PreparedStatement stmt = connection.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
-
-            if (rs.next()) {
-                totalSprints = rs.getInt(1); // Obtém o número total de sprints
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return totalSprints;
-    }
     public Date buscarDataFinalPrimeiraSprint() throws SQLException {
         String sql = "SELECT DATA_FINAL FROM SPRINTS ORDER BY NUM_SPRINT ASC LIMIT 1";
 
@@ -178,5 +158,23 @@ public class SprintDao {
         }
         return null; // Retorna null se nenhuma sprint for encontrada
     }
+
+    public static void atualizarDiasLiberados(int numSprint, int diasLiberados) throws SQLException {
+        String sql = """
+            UPDATE SPRINTS
+            SET DIAS_LIBERADOS = ?
+            WHERE NUM_SPRINT = ?;
+            """;
+
+        try (Connection connection = ConexaoDao.getConnection();
+             PreparedStatement stmt = connection.prepareStatement(sql)) {
+
+            stmt.setInt(1, diasLiberados); // Configura o valor de dias liberados
+            stmt.setInt(2, numSprint);     // Configura o número da sprint
+
+            stmt.executeUpdate(); // Executa o update no banco
+        }
+    }
+
 
 }

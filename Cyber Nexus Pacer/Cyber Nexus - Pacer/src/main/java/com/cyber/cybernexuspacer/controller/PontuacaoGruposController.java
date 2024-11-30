@@ -6,9 +6,7 @@ import com.cyber.cybernexuspacer.entity.PontuacaoGrupo;
 import com.cyber.cybernexuspacer.entity.Sprint;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 
@@ -19,6 +17,9 @@ import java.util.List;
 import java.util.Map;
 
 public class PontuacaoGruposController {
+
+    @FXML
+    private TextField txtDiasLiberados;
 
     @FXML
     private AnchorPane pontuacao_scroll_sprints; // Container para os botões das Sprints
@@ -129,11 +130,9 @@ public class PontuacaoGruposController {
         return grupoPane;
     }
 
-    @FXML
-    void onbtnconfirmar(ActionEvent event) throws SQLException {
-        // Atualizar as notas no banco
-        PontuacaoGruposDao pontuacaoGruposDao = new PontuacaoGruposDao();
 
+    @FXML
+    void onClickBloquearSprint(ActionEvent event) throws SQLException {
         if (selectedSprintButton == null) {
             System.out.println("Nenhuma sprint selecionada!");
             return;
@@ -142,14 +141,81 @@ public class PontuacaoGruposController {
         // Extrair o número da sprint selecionada
         int numSprint = Integer.parseInt(selectedSprintButton.getText().replace("SPRINT ", ""));
 
+        // Chamar o método do DAO para liberar a sprint
+        PontuacaoGruposDao.bloquearSprint(numSprint);
+
+        showAlert(Alert.AlertType.INFORMATION, "Sucesso", "Sprint " + numSprint + " bloqueada com sucesso!");
+    }
+
+    @FXML
+    void onClickLiberarSprint(ActionEvent event) throws SQLException {
+        if (selectedSprintButton == null) {
+            System.out.println("Nenhuma sprint selecionada!");
+            return;
+        }
+
+        // Extrair o número da sprint selecionada
+        int numSprint = Integer.parseInt(selectedSprintButton.getText().replace("SPRINT ", ""));
+
+        // Chamar o método do DAO para liberar a sprint
+        PontuacaoGruposDao.liberarSprint(numSprint);
+
+        showAlert(Alert.AlertType.INFORMATION, "Sucesso", "Sprint " + numSprint + " liberada com sucesso!");
+    }
+
+
+    @FXML
+    void onbtnconfirmar(ActionEvent event) throws SQLException {
+        // Atualizar as notas no banco
+        PontuacaoGruposDao pontuacaoGruposDao = new PontuacaoGruposDao();
+
+        if (selectedSprintButton == null) {
+            showAlert(Alert.AlertType.WARNING, "Atenção", "Nenhuma sprint selecionada!");
+            return;
+        }
+
+        // Extrair o número da sprint selecionada
+        int numSprint = Integer.parseInt(selectedSprintButton.getText().replace("SPRINT ", ""));
+
+        // 1. Atualizar as notas para os grupos
         for (Map.Entry<String, TextField> entry : notasMap.entrySet()) {
             String grupo = entry.getKey();
             int novaNota = Integer.parseInt(entry.getValue().getText());
             pontuacaoGruposDao.salvarNotaGrupo(grupo, numSprint, novaNota);
         }
 
-        System.out.println("Notas salvas no banco com sucesso!");
+        // 2. Atualizar os dias liberados para a sprint
+        String diasLiberadosStr = txtDiasLiberados.getText();
+
+        // Validar se o valor inserido é um número válido
+        if (diasLiberadosStr.isEmpty()) {
+            showAlert(Alert.AlertType.WARNING, "Atenção", "Por favor, insira o número de dias liberados.");
+            return;
+        }
+
+        int diasLiberados;
+        try {
+            diasLiberados = Integer.parseInt(diasLiberadosStr); // Converte o valor para inteiro
+        } catch (NumberFormatException e) {
+            showAlert(Alert.AlertType.WARNING, "Erro", "Valor inválido para dias liberados.");
+            return;
+        }
+
+        // Chamar o método do DAO para atualizar os dias liberados para a sprint selecionada
+        SprintDao.atualizarDiasLiberados(numSprint, diasLiberados);
+
+        showAlert(Alert.AlertType.INFORMATION, "Sucesso", "Notas salvas no banco com sucesso!");
+        showAlert(Alert.AlertType.INFORMATION, "Sucesso", "Dias liberados atualizados para a Sprint " + numSprint + " com sucesso!");
     }
+
+    // Método auxiliar para mostrar alertas
+    private void showAlert(Alert.AlertType alertType, String title, String message) {
+        Alert alert = new Alert(alertType, message, ButtonType.OK);
+        alert.setTitle(title);
+        alert.setHeaderText(null); // Não queremos um cabeçalho
+        alert.showAndWait();
+    }
+
 
     @FXML
     void onbtnsair(ActionEvent event) throws IOException {

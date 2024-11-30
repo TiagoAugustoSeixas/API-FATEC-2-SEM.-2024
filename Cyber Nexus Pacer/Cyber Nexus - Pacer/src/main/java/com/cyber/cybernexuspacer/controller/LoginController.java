@@ -61,21 +61,26 @@ public class LoginController {
                     redirecionarParaRecuperacaoSenha(nome);
                 }
                 else if ("Aluno".equals(tipoUsuario)) {
+                    boolean podeAcessar = loginDao.verificarAcessoAluno(nome);  // Verifica se o aluno pode acessar
+                    if (podeAcessar) {
+                        // Se o aluno puder acessar, continua o processo de login normal
+                        // Aqui, após a validação, busca os detalhes do aluno e armazena na sessão
+                        AreaDoAluno aluno = loginDao.buscarAlunoPorEmail(nome);  // Método para buscar detalhes do aluno
+                        AlunoSession.setAlunoLogado(aluno);
 
+                        Main.setRoot("AreaDoAluno-view");
+                        System.out.println("email: " + nome);
+                    } else {
+                        // Se o aluno não puder acessar, exibe um alerta
+                        lblUsuarioESenhaInvalidos.setText("Sistema não liberado ainda. Acesso bloqueado.");
+                        lblUsuarioESenhaInvalidos.setLayoutX(270);
+                    }
 
-                    // Aqui, após a validação, busca os detalhes do aluno e armazena na sessão
-                    AreaDoAluno aluno = loginDao.buscarAlunoPorEmail(nome);  // Método para buscar detalhes do aluno
-
-                    // Armazena o aluno logado na sessão
-                    AlunoSession.setAlunoLogado(aluno);
-
-                    Main.setRoot("AreaDoAluno-view");
-                    System.out.println("email: " + nome);
                 }
+                // Lógica para outros tipos de usuários (Admin, Professor)
                 else if ("Admin".equals(tipoUsuario)) {
                     Main.setRoot("TelaMenu-view");
-                }
-                else if ("Professor".equals(tipoUsuario)) {
+                } else if ("Professor".equals(tipoUsuario)) {
                     Main.setRoot("TelaMenu-view");
                 }
             } else {
