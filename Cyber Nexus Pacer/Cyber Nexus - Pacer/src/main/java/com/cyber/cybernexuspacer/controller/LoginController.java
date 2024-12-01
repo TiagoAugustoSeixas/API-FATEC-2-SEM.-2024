@@ -14,6 +14,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -26,6 +27,9 @@ public class LoginController {
     public Label lblTxtSistemaPacer;
     @FXML
     private Button btnEntrar;
+
+    @FXML
+    private Text esqueciMinhaSenha;
 
     @FXML
     private ImageView imgFatec;
