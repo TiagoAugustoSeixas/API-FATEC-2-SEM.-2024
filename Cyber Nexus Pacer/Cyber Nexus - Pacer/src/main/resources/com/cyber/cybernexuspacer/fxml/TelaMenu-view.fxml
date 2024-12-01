@@ -45,7 +45,7 @@
       </Button>
       <Pane layoutX="40.0" layoutY="135.0" prefHeight="384.0" prefWidth="720.0" style="-fx-background-color: white; -fx-background-radius: 4; -fx-border-color: black; -fx-border-radius: 4;">
          <children>
-            <Button fx:id="menu_btn_gerenciar_alunos" layoutX="69.0" layoutY="52.0" mnemonicParsing="false" onAction="#onbtn_tela_gerenciar_alunos" prefHeight="99.0" prefWidth="219.0" style="-fx-background-color: #D9D9D9; -fx-background-radius: 15;" text="GERENCIAR ALUNOS" textAlignment="CENTER" textFill="#39535f" wrapText="true">
+            <Button fx:id="menu_btn_gerenciar_alunos" layoutX="69.0" layoutY="52.0" mnemonicParsing="false" onAction="#onbtn_tela_gerenciar_alunos" prefHeight="99.0" prefWidth="219.0" style="-fx-background-color: #D9D9D9; -fx-background-radius: 15;" text="Gerenciar Alunos" textAlignment="CENTER" textFill="#39535f" wrapText="true">
                <font>
                   <Font name="Arial Bold" size="24.0" />
                </font>
@@ -56,7 +56,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <Button fx:id="menu_btn_cadastrar_critérios" layoutX="69.0" layoutY="250.0" mnemonicParsing="false" onAction="#onbtn_tela_cadastrar_critérios" prefHeight="99.0" prefWidth="219.0" style="-fx-background-color: #D9D9D9; -fx-background-radius: 15;" text="CADASTRAR CRITÉRIOS" textAlignment="CENTER" textFill="#39535f" wrapText="true">
+            <Button fx:id="menu_btn_cadastrar_critérios" layoutX="69.0" layoutY="250.0" mnemonicParsing="false" onAction="#onbtn_tela_cadastrar_critérios" prefHeight="99.0" prefWidth="219.0" style="-fx-background-color: #D9D9D9; -fx-background-radius: 15;" text="Cadastrar Sprints" textAlignment="CENTER" textFill="#39535f" wrapText="true">
                <font>
                   <Font name="Arial Bold" size="24.0" />
                </font>
@@ -67,7 +67,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <Button fx:id="menu_btn_cadastrar_turma" layoutX="460.0" layoutY="250.0" mnemonicParsing="false" onAction="#onbtn_tela_cadastrar_turma" prefHeight="99.0" prefWidth="219.0" style="-fx-background-color: #D9D9D9; -fx-background-radius: 15;" text="CADASTRAR TURMA" textAlignment="CENTER" textFill="#39535f" wrapText="true">
+            <Button fx:id="menu_btn_cadastrar_turma" layoutX="460.0" layoutY="250.0" mnemonicParsing="false" onAction="#onbtn_tela_cadastrar_turma" prefHeight="99.0" prefWidth="219.0" style="-fx-background-color: #D9D9D9; -fx-background-radius: 15;" text="Cadastar   Turma" textAlignment="CENTER" textFill="#39535f" wrapText="true">
                <font>
                   <Font name="Arial Bold" size="24.0" />
                </font>
@@ -78,7 +78,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <Button fx:id="menu_btn_gerenciar_grupos" layoutX="460.0" layoutY="52.0" mnemonicParsing="false" onAction="#onbtn_tela_gerenciar_grupos" prefHeight="99.0" prefWidth="219.0" style="-fx-background-color: #D9D9D9; -fx-background-radius: 15;" text="GERENCIAR GRUPOS" textAlignment="CENTER" textFill="#39535f" wrapText="true">
+            <Button fx:id="menu_btn_gerenciar_grupos" layoutX="460.0" layoutY="52.0" mnemonicParsing="false" onAction="#onbtn_tela_gerenciar_grupos" prefHeight="99.0" prefWidth="219.0" style="-fx-background-color: #D9D9D9; -fx-background-radius: 15;" text="Gerenciar Grupos" textAlignment="CENTER" textFill="#39535f" wrapText="true">
                <font>
                   <Font name="Arial Bold" size="24.0" />
                </font>
