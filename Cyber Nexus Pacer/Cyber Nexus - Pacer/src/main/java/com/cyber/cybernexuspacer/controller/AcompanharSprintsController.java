@@ -7,10 +7,7 @@ import com.cyber.cybernexuspacer.dao.SprintDao;
 import com.cyber.cybernexuspacer.entity.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
@@ -281,96 +278,104 @@ public class AcompanharSprintsController {
     }
 
     public void gerarRelatorio(List<GrupoSprint> dados) throws Exception {
-        // Criação do documento PDF
-        Document document = new Document();
-        PdfWriter.getInstance(document, new FileOutputStream("relatorio_grupos.pdf"));
-        document.open();
+        try{
+            // Criação do documento PDF
+            Document document = new Document();
+            PdfWriter.getInstance(document, new FileOutputStream("relatorio_grupos.pdf"));
+            document.open();
 
-        // Título do relatório
-        Paragraph titulo = new Paragraph("Relatório de Grupos e Sprints", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 16));
-        titulo.setAlignment(Element.ALIGN_CENTER);
-        titulo.setSpacingAfter(20);
-        document.add(titulo);
+            // Título do relatório
+            Paragraph titulo = new Paragraph("Relatório de Grupos e Sprints", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 16));
+            titulo.setAlignment(Element.ALIGN_CENTER);
+            titulo.setSpacingAfter(20);
+            document.add(titulo);
 
-        // Criação da tabela
-        int numColunas = dados.stream().mapToInt(g -> g.getNotas().size()).max().orElse(1) + 1; // +1 para o nome do grupo
-        PdfPTable table = new PdfPTable(numColunas);
-        table.setWidthPercentage(100);
+            // Criação da tabela
+            int numColunas = dados.stream().mapToInt(g -> g.getNotas().size()).max().orElse(1) + 1; // +1 para o nome do grupo
+            PdfPTable table = new PdfPTable(numColunas);
+            table.setWidthPercentage(100);
 
-        // Cabeçalho
-        PdfPCell headerGrupo = new PdfPCell(new Phrase("Grupo", FontFactory.getFont(FontFactory.HELVETICA_BOLD)));
-        table.addCell(headerGrupo);
+            // Cabeçalho
+            PdfPCell headerGrupo = new PdfPCell(new Phrase("Grupo", FontFactory.getFont(FontFactory.HELVETICA_BOLD)));
+            table.addCell(headerGrupo);
 
-        for (int i = 1; i < numColunas; i++) {
-            PdfPCell headerSprint = new PdfPCell(new Phrase("Sprint " + i, FontFactory.getFont(FontFactory.HELVETICA_BOLD)));
-            table.addCell(headerSprint);
-        }
-
-        // Dados
-        for (GrupoSprint grupo : dados) {
-            table.addCell(new PdfPCell(new Phrase(grupo.getNome())));
-            for (int nota : grupo.getNotas()) {
-                table.addCell(new PdfPCell(new Phrase(String.valueOf(nota))));
+            for (int i = 1; i < numColunas; i++) {
+                PdfPCell headerSprint = new PdfPCell(new Phrase("Sprint " + i, FontFactory.getFont(FontFactory.HELVETICA_BOLD)));
+                table.addCell(headerSprint);
             }
-            // Preenche células vazias para grupos com menos sprints
-            for (int i = grupo.getNotas().size(); i < numColunas - 1; i++) {
-                table.addCell(new PdfPCell(new Phrase("")));
+
+            // Dados
+            for (GrupoSprint grupo : dados) {
+                table.addCell(new PdfPCell(new Phrase(grupo.getNome())));
+                for (int nota : grupo.getNotas()) {
+                    table.addCell(new PdfPCell(new Phrase(String.valueOf(nota))));
+                }
+                // Preenche células vazias para grupos com menos sprints
+                for (int i = grupo.getNotas().size(); i < numColunas - 1; i++) {
+                    table.addCell(new PdfPCell(new Phrase("")));
+                }
             }
+
+            // Adiciona a tabela ao documento
+            document.add(table);
+            document.close();
+
+            exibirAlerta("sucesso", "Relatório Gerado", "Relatório gerado com sucesso: relatorio_grupos.pdf");
+        } catch (Exception e) {
+            exibirAlerta("erro", "Erro ao Gerar Relatório", "Erro ao gerar o relatório de grupos: " + e.getMessage());
         }
-
-        // Adiciona a tabela ao documento
-        document.add(table);
-        document.close();
-
-        System.out.println("Relatório gerado com sucesso: relatorio_grupos.pdf");
     }
 
     public void gerarRelatorioAlunos(List<AcompanharSprints> alunos) throws Exception {
-        // Criação do documento PDF
-        Document document = new Document();
-        PdfWriter.getInstance(document, new FileOutputStream("relatorio_alunos_com_notas.pdf"));
-        document.open();
+        try{
+            // Criação do documento PDF
+            Document document = new Document();
+            PdfWriter.getInstance(document, new FileOutputStream("relatorio_alunos_com_notas.pdf"));
+            document.open();
 
-        // Título do relatório
-        Paragraph titulo = new Paragraph("Relatório de Alunos por Grupo", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 16));
-        titulo.setAlignment(Element.ALIGN_CENTER);
-        titulo.setSpacingAfter(20);
-        document.add(titulo);
+            // Título do relatório
+            Paragraph titulo = new Paragraph("Relatório de Alunos por Grupo", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 16));
+            titulo.setAlignment(Element.ALIGN_CENTER);
+            titulo.setSpacingAfter(20);
+            document.add(titulo);
 
-        // Criação da tabela com 3 colunas: Grupo, Nome do Aluno, e Nota
-        PdfPTable table = new PdfPTable(5);
-        table.setWidthPercentage(100);
+            // Criação da tabela com 3 colunas: Grupo, Nome do Aluno, e Nota
+            PdfPTable table = new PdfPTable(5);
+            table.setWidthPercentage(100);
 
-        // Cabeçalhos
-        PdfPCell headerGrupo = new PdfPCell(new Phrase("Grupo", FontFactory.getFont(FontFactory.HELVETICA_BOLD)));
-        table.addCell(headerGrupo);
+            // Cabeçalhos
+            PdfPCell headerGrupo = new PdfPCell(new Phrase("Grupo", FontFactory.getFont(FontFactory.HELVETICA_BOLD)));
+            table.addCell(headerGrupo);
 
-        PdfPCell headerAluno = new PdfPCell(new Phrase("Aluno", FontFactory.getFont(FontFactory.HELVETICA_BOLD)));
-        table.addCell(headerAluno);
+            PdfPCell headerAluno = new PdfPCell(new Phrase("Aluno", FontFactory.getFont(FontFactory.HELVETICA_BOLD)));
+            table.addCell(headerAluno);
 
-        PdfPCell headerNota = new PdfPCell(new Phrase("Nota", FontFactory.getFont(FontFactory.HELVETICA_BOLD)));
-        table.addCell(headerNota);
+            PdfPCell headerNota = new PdfPCell(new Phrase("Nota", FontFactory.getFont(FontFactory.HELVETICA_BOLD)));
+            table.addCell(headerNota);
 
-        PdfPCell headerCriterio = new PdfPCell(new Phrase("Critério", FontFactory.getFont(FontFactory.HELVETICA_BOLD)));
-        table.addCell(headerCriterio);
+            PdfPCell headerCriterio = new PdfPCell(new Phrase("Critério", FontFactory.getFont(FontFactory.HELVETICA_BOLD)));
+            table.addCell(headerCriterio);
 
-        PdfPCell headerSprint = new PdfPCell(new Phrase("Sprint", FontFactory.getFont(FontFactory.HELVETICA_BOLD)));
-        table.addCell(headerSprint);
+            PdfPCell headerSprint = new PdfPCell(new Phrase("Sprint", FontFactory.getFont(FontFactory.HELVETICA_BOLD)));
+            table.addCell(headerSprint);
 
-        // Dados
-        for (AcompanharSprints aluno : alunos) {
-            table.addCell(new PdfPCell(new Phrase(aluno.getGrupo())));
-            table.addCell(new PdfPCell(new Phrase(aluno.getNomeAluno())));
-            table.addCell(new PdfPCell(new Phrase(String.format("%.2f", aluno.getMediaNotaAluno()))));
-            table.addCell(new PdfPCell(new Phrase(aluno.getCriterio())));
-            table.addCell(new PdfPCell(new Phrase(String.valueOf(aluno.getSprint()))));
+            // Dados
+            for (AcompanharSprints aluno : alunos) {
+                table.addCell(new PdfPCell(new Phrase(aluno.getGrupo())));
+                table.addCell(new PdfPCell(new Phrase(aluno.getNomeAluno())));
+                table.addCell(new PdfPCell(new Phrase(String.format("%.2f", aluno.getMediaNotaAluno()))));
+                table.addCell(new PdfPCell(new Phrase(aluno.getCriterio())));
+                table.addCell(new PdfPCell(new Phrase(String.valueOf(aluno.getSprint()))));
+            }
+
+            // Adiciona a tabela ao documento
+            document.add(table);
+            document.close();
+
+            exibirAlerta("sucesso", "Relatório Gerado", "Relatório gerado com sucesso: relatorio_alunos_com_notas.pdf");
+        } catch (Exception e) {
+            exibirAlerta("erro", "Erro ao Gerar Relatório", "Erro ao gerar o relatório de alunos: " + e.getMessage());
         }
-
-        // Adiciona a tabela ao documento
-        document.add(table);
-        document.close();
-
-        System.out.println("Relatório gerado com sucesso: relatorio_alunos_com_notas.pdf");
     }
 
     @FXML
@@ -391,42 +396,63 @@ public class AcompanharSprintsController {
     }
 
     private void gerarRelatorioAlunoIndividual(List<AcompanharSprints> alunoInfo) throws Exception {
-        // Criação do documento PDF
-        Document document = new Document();
-        PdfWriter.getInstance(document, new FileOutputStream("relatorio_individual.pdf"));
-        document.open();
+            try {
+            // Criação do documento PDF
+            Document document = new Document();
+            PdfWriter.getInstance(document, new FileOutputStream("relatorio_individual.pdf"));
+            document.open();
 
-        // Título do relatório
-        Paragraph titulo = new Paragraph("Relatório Individual do Aluno", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 16));
-        titulo.setAlignment(Element.ALIGN_CENTER);
-        titulo.setSpacingAfter(20);
-        document.add(titulo);
+            // Título do relatório
+            Paragraph titulo = new Paragraph("Relatório Individual do Aluno", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 16));
+            titulo.setAlignment(Element.ALIGN_CENTER);
+            titulo.setSpacingAfter(20);
+            document.add(titulo);
 
-        // Criação da tabela com as informações do aluno
-        PdfPTable table = new PdfPTable(4); // 4 colunas: Nome do Aluno, Nota, Critério, Sprint
-        table.setWidthPercentage(100);
+            // Criação da tabela com as informações do aluno
+            PdfPTable table = new PdfPTable(4); // 4 colunas: Nome do Aluno, Nota, Critério, Sprint
+            table.setWidthPercentage(100);
 
-        // Cabeçalhos da tabela
-        table.addCell(new PdfPCell(new Phrase("Aluno", FontFactory.getFont(FontFactory.HELVETICA_BOLD))));
-        table.addCell(new PdfPCell(new Phrase("Nota", FontFactory.getFont(FontFactory.HELVETICA_BOLD))));
-        table.addCell(new PdfPCell(new Phrase("Critério", FontFactory.getFont(FontFactory.HELVETICA_BOLD))));
-        table.addCell(new PdfPCell(new Phrase("Sprint", FontFactory.getFont(FontFactory.HELVETICA_BOLD))));
+            // Cabeçalhos da tabela
+            table.addCell(new PdfPCell(new Phrase("Aluno", FontFactory.getFont(FontFactory.HELVETICA_BOLD))));
+            table.addCell(new PdfPCell(new Phrase("Nota", FontFactory.getFont(FontFactory.HELVETICA_BOLD))));
+            table.addCell(new PdfPCell(new Phrase("Critério", FontFactory.getFont(FontFactory.HELVETICA_BOLD))));
+            table.addCell(new PdfPCell(new Phrase("Sprint", FontFactory.getFont(FontFactory.HELVETICA_BOLD))));
 
-        // Adicionar os dados do aluno
-        for (AcompanharSprints sprints : alunoInfo) {
-            table.addCell(new PdfPCell(new Phrase(sprints.getNomeAluno())));
-            table.addCell(new PdfPCell(new Phrase(String.format("%.2f", sprints.getMediaNotaAluno()))));
-            table.addCell(new PdfPCell(new Phrase(sprints.getCriterio())));
-            table.addCell(new PdfPCell(new Phrase(String.valueOf(sprints.getSprint()))));
+            // Adicionar os dados do aluno
+            for (AcompanharSprints sprints : alunoInfo) {
+                table.addCell(new PdfPCell(new Phrase(sprints.getNomeAluno())));
+                table.addCell(new PdfPCell(new Phrase(String.format("%.2f", sprints.getMediaNotaAluno()))));
+                table.addCell(new PdfPCell(new Phrase(sprints.getCriterio())));
+                table.addCell(new PdfPCell(new Phrase(String.valueOf(sprints.getSprint()))));
+            }
+
+            // Adiciona a tabela ao documento
+            document.add(table);
+            document.close();
+
+            exibirAlerta("sucesso", "Relatório Gerado", "Relatório individual gerado com sucesso: relatorio_individual.pdf");
+        } catch (Exception e) {
+            exibirAlerta("erro", "Erro ao Gerar Relatório", "Erro ao gerar o relatório individual: " + e.getMessage());
         }
 
-        // Adiciona a tabela ao documento
-        document.add(table);
-        document.close();
 
-        System.out.println("Relatório individual gerado com sucesso: relatorio_individual.pdf");
     }
 
+    // Método genérico para exibir alertas
+    public void exibirAlerta(String tipo, String titulo, String mensagem) {
+        Alert alert;
+        if (tipo.equals("sucesso")) {
+            alert = new Alert(Alert.AlertType.INFORMATION);
+        } else if (tipo.equals("erro")) {
+            alert = new Alert(Alert.AlertType.ERROR);
+        } else {
+            alert = new Alert(Alert.AlertType.WARNING);
+        }
+        alert.setTitle(titulo);
+        alert.setHeaderText(null);
+        alert.setContentText(mensagem);
+        alert.showAndWait();
+    }
 
 
     private Label criaLabel(double layoutX, double layoutY, String descricao, String style) {
