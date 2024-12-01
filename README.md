@@ -54,12 +54,14 @@ Nesta sprint, foram abordados os seguintes pontos:
 _______________________________________________________________________________
 
 | **INTEGRANTES**| **FUNÇÃO** | **NETWORKS** |**IDS**|
+
 |-------|--------|-------|--------|
 | DIEGO SALES GAMERO JOÃO| ![Static Badge](https://img.shields.io/badge/DEV-blue) | <a href="https://github.com/DiegoSGamero" target="_blank"><img src="https://img.shields.io/badge/-black?style=social&logo=github&label=github&color=black" target="_blank"></a>| ![Image](https://github.com/user-attachments/assets/3c28b9a0-d16b-4fa2-9b41-f4678eb8959f)|
 |  JOÃO PEDRO VENTURA | ![Static Badge](https://img.shields.io/badge/DEV-blue) | <a href="https://github.com/jaupventur" target="_blank"><img src="https://img.shields.io/badge/-black?style=social&logo=github&label=github&color=black" target="_blank"></a>| ![Image](https://github.com/user-attachments/assets/4bf968bd-8879-47d7-a0ec-522768f831dd)|
 |  TIAGO AUGUSTO SEIXAS  | ![Static Badge](https://img.shields.io/badge/DEV-blue) | <a href="https://github.com/TiagoAugustoSeixas" target="_blank"><img src="https://img.shields.io/badge/-black?style=social&logo=github&label=github&color=black" target="_blank"></a>|![Image](https://github.com/user-attachments/assets/d3c8ecb3-562d-408b-9122-a35133830aa9)|
 |  TIAGO SANTOS | ![Static Badge](https://img.shields.io/badge/SCRUM_MASTER-black) | <a href="https://github.com/tiago17santos" target="_blank"><img src="https://img.shields.io/badge/-black?style=social&logo=github&label=github&color=black" target="_blank"></a>|![Image](https://github.com/user-attachments/assets/e39515e8-763e-4a17-befd-04cff4d20c9c)|
 |  VICTOR SOUZA |  ![Static Badge](https://img.shields.io/badge/DEV-blue) | <a href=" https://github.com/victor4486 " target="_blank"><img src="https://img.shields.io/badge/-black?style=social&logo=github&label=github&color=black" target="_blank"></a>| ![image](https://github.com/user-attachments/assets/442d8d83-06b9-4313-a0da-15f24c83c593)
+
 
 
 ## <a name="BACKLOG"></a> **SPRINT BACKLOG 🗃️** 
@@ -69,6 +71,7 @@ _______________________________________________________________________________
 |:-------:|:--------:|:-------:|
 | DESENVOLVIMENTO DO LIMITADOR DE PONTOS DO GRUPO | PRIORIDADE MÉDIA | ✅ |
 | CRIAÇÃO DO SISTEMA DE VOTAÇÃO | PRIORIDADE ALTA | ✅ |
+
 | RESTRUTURAÇÃO DA MODELAGEM DE DADOS | PRIORIDADE MÉDIA | ✅ |
 | DESENVOLVIMENTO DO MANUAL DE USUÁRIO DO ALUNO | PRIORIDADE MÉDIA | ✅ |
 
