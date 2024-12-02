@@ -89,13 +89,10 @@ _______________________________________________________________________________
  ![image](https://github.com/API-2-Semestre/API-FATEC-2-SEM.-2024/blob/Sprint3/DOCUMENTOS/Burndown%20Sprint3.jpg)
  
  
- [**MODELAGEM DE BANCO DE DADOS LOCAL**](https://github.com/API-2-Semestre/API-FATEC-2-SEM.-2024/tree/main)
+ [**MODELAGEM DE BANCO DE DADOS**](https://github.com/API-2-Semestre/API-FATEC-2-SEM.-2024/tree/main)
 
  ![image](https://github.com/API-2-Semestre/API-FATEC-2-SEM.-2024/blob/Sprint3/DOCUMENTOS/MODELAGEM_DE_DADOS_SPRINT3.jpg)
 
- [**MODELAGEM DE BANCO DE DADOS ONLINE**](https://github.com/API-2-Semestre/API-FATEC-2-SEM.-2024/tree/main)
- 
-![image](https://github.com/API-2-Semestre/API-FATEC-2-SEM.-2024/blob/Sprint3/DOCUMENTOS/tabela_logica_BD_online.jpg)
 
  [**PROTÓTIPO DE TELAS**](https://www.figma.com/design/QGUqQzvNf3rkLnSx3C5mAM/PACER-V2?node-id=0-1&t=bUoGKdfa1E2TV2fU-1)
  
