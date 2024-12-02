@@ -4,8 +4,7 @@
 <body>
 
 ![image](https://github.com/API-2-Semestre/API-FATEC-2-SEM.-2024/blob/Sprint2/DOCUMENTOS/BANNER%20CYBERNEXUS.jpg)
-
-
+ 
 
 
 ## **ÍNDICE**
